@@ -137,28 +137,26 @@ a.products {
   margin-bottom: 0.25rem;
 }
 
-/* --- HOVER STYLING MECHANICS (FIXED FOR MOBILE) --- */
-/* This media query ensures hidden-until-hover only triggers on desktop devices with pointing mice */
-@media (hover: hover) {
+/* --- FOOLPROOF HOVER STYLING MECHANICS --- */
+/* DEFAULT (Mobile & Tablets): The button is naturally completely visible and clickable */
+:not(.flexed-products) .btn-cart {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition: 0.2s ease-in-out;
+}
+
+/* DESKTOP LARGE SCREENS ONLY (>= 992px): Hide the button until the user hovers over the card */
+@media (min-width: 992px) {
   :not(.flexed-products) .btn-cart {
     opacity: 0;
     transform: translateY(10px);
     pointer-events: none;
-    transition: 0.2s ease-in-out;
   }
 
   :not(.flexed-products).products:hover .btn-cart {
     opacity: 1;
     transform: translateY(0);
-    pointer-events: auto;
-  }
-}
-
-/* Fallback for touchscreens (Mobile/Tablets) so buttons stay permanently visible */
-@media (hover: none) {
-  :not(.flexed-products) .btn-cart {
-    opacity: 1;
-    transform: none;
     pointer-events: auto;
   }
 }
@@ -252,10 +250,11 @@ a.products {
   }
 }
 
-/* Prevents the card items from squishing on tiny/mobile screens now that buttons are always visible */
-@media (max-width: 576px) {
+/* Prevents the card items from squishing on mobile screens since buttons are visible */
+@media (max-width: 991px) {
   :not(.flexed-products).products {
     height: auto !important;
     min-height: 350px;
+    padding-bottom: 15px !important;
   }
 }
