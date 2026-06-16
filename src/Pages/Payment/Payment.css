@@ -1,0 +1,15 @@
+.chk-header {
+  background: rgb(242, 247, 247);
+}
+
+.email,
+.adres {
+  line-height: 0;
+  font-size: 13px;
+}
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}

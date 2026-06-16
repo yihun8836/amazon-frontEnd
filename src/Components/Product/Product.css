@@ -1,0 +1,243 @@
+/* --- Home Page Product Grid Cards --- */
+.products {
+  max-width: 220px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  background-color: white;
+}
+
+a.products {
+  max-width: 260px;
+}
+
+/* STRICT TARGETED HEIGHT: Only limits standard Home Page Grid Card Heights */
+:not(.flexed-products).products {
+  height: 340px;
+}
+
+.products:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.custom-card-img {
+  width: auto;
+  max-width: 100%;
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+/* --- Universal Shared Row Mechanics --- */
+.flexed-products {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  background-color: white;
+}
+
+/* --- 1. Product Detail Specific Card --- */
+.detail-layout-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 40px;
+  padding: 25px !important;
+}
+
+.detail-layout-card .product-card-img-container {
+  flex: 0 0 35% !important;
+  min-width: 280px;
+  display: flex;
+  justify-content: center;
+  align-self: flex-start;
+}
+
+.detail-layout-card .detail-img {
+  width: 100% !important;
+  max-width: 380px !important;
+  height: 380px !important;
+  object-fit: contain;
+}
+
+/* --- 2. Cart & Payment Specific Mini-Card --- */
+.payment-layout-card {
+  max-width: 800px !important;
+  gap: 20px;
+  padding: 15px !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.payment-layout-card .product-card-img-container {
+  flex: 0 0 130px !important;
+  width: 130px !important;
+  height: 130px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-layout-card .detail-img {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 120px !important;
+  object-fit: contain;
+}
+
+.payment-layout-card h5 {
+  font-size: 1.1rem !important;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.payment-layout-card .price-tag {
+  font-size: 1rem !important;
+}
+
+.cart-qty-row button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Shared General Styling Elements (Isolated to Grid cards only) --- */
+:not(.flexed-products) .card-title {
+  height: 38px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 4px;
+}
+
+:not(.flexed-products) .card-title h5 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+:not(.flexed-products) .desc {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-body p {
+  margin-bottom: 0.25rem;
+}
+
+/* HOVER STYLING MECHANICS: Only applied on standard non-flex grids */
+:not(.flexed-products) .btn-cart {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+  border-radius: 40px;
+  font-size: 0.85rem;
+}
+
+:not(.flexed-products).products:hover .btn-cart {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.btn-cart {
+  border-radius: 40px;
+  font-size: 0.85rem;
+}
+
+.flexed-btn {
+  width: 180px !important;
+}
+
+.rating-star {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.star-count {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* --- Isolated Fixes for buttons inside Cart / Payment Views --- */
+.payment-layout-card .btn-cart {
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  width: 140px !important;
+  height: 32px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-layout-card .cart-qty-row {
+  margin-top: 6px !important;
+}
+
+.payment-layout-card .cart-qty-row button {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  color: #495057;
+  transition: all 0.2s ease;
+}
+
+.payment-layout-card .cart-qty-row button:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.payment-layout-card .cart-qty-row span {
+  font-size: 0.95rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* --- Responsive Layout Breakdowns --- */
+@media (max-width: 768px) {
+  .flexed-products {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 20px;
+    height: auto !important;
+  }
+
+  .detail-layout-card .product-card-img-container,
+  .payment-layout-card .product-card-img-container {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .detail-layout-card .detail-img {
+    height: 250px !important;
+    max-width: 300px !important;
+  }
+
+  .payment-layout-card .detail-img {
+    height: 130px !important;
+  }
+
+  .flexed-btn {
+    width: 100% !important;
+  }
+}

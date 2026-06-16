@@ -1,0 +1,998 @@
+1.Header.jsx
+import { CiLocationOn, CiSearch } from "react-icons/ci";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { BiCart } from "react-icons/bi";
+import { IoMenu } from "react-icons/io5";
+import { useState } from "react";
+import logo from "../../assets/images/icons/amazon.png";
+import engFlag from "../../assets/images/icons/engFlag.png";
+import { Link } from "react-router-dom";
+import "./header.css";
+import { useContext } from "react";
+import { DataProviderContext } from "../../DataProvider/DataProvider";
+const subNavLinks = [
+  { label: "Today's Deals", to: "/" },
+  { label: "Gift Cards", to: "/" },
+  { label: "Sell", to: "/" },
+  { label: "Registry", to: "/" },
+  { label: "Prime Video", to: "/" },
+  { label: "Customer Service", to: "/" },
+];
+import { auth } from "../../Utility/firebase";
+function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { state } = useContext(DataProviderContext);
+  return (
+    <>
+      <header className="container-fluid header bg-black  top-0 z-10000">
+        <div className="header-container">
+          {/* Logo */}
+          <Link to="/" className="logo hover-border">
+            <img src={logo} alt="Amazon Logo" />
+          </Link>
+
+          {/* Location — hidden on mobile */}
+          <div className="location hover-border hide-mobile">
+            <CiLocationOn className="location-icon" />
+            <div className="location-text">
+              <span className="small-text">Deliver to</span>
+              <strong>Ethiopia</strong>
+            </div>
+          </div>
+
+          {/* Search */}
+          <div className="search-wrapper">
+            <select className="search-category">
+              <option>All</option>
+            </select>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search products"
+            />
+            <button className="search-btn">
+              <CiSearch />
+            </button>
+          </div>
+
+          {/* Language — hidden on mobile */}
+          <div className="language-wrapper hover-border hide-mobile">
+            <img src={engFlag} alt="English" />
+            <span>
+              <strong>EN</strong>
+              <IoMdArrowDropdown />
+            </span>
+          </div>
+
+          {/* Account — hidden on mobile */}
+
+          <Link
+            className="nav-item hover-border hide-mobile p-0"
+            to={!state?.user && "/auth"}
+          >
+            <span className="small-text">
+              {state.user ? (
+                <span onClick={() => auth.signOut()}>
+                  Hello,
+                  {state.user.email.split("@")[0]}
+                  <br />
+                  Sign Out
+                </span>
+              ) : (
+                <span> Sign In</span>
+              )}
+            </span>
+            <strong>
+              Account & Lists <IoMdArrowDropdown />
+            </strong>
+          </Link>
+
+          {/* Orders — hidden on mobile */}
+          <div className="nav-item hover-border hide-mobile">
+            <Link to="/orders">
+              <span className="small-text">Returns</span>
+              <strong>& Orders</strong>
+            </Link>
+          </div>
+
+          {/* Cart */}
+          <div className="cart-wrapper hover-border">
+            <Link to="/cart">
+              <span className="cart-count">{state.cart.length}</span>
+              <BiCart className="cart-icon" size={35} />
+            </Link>
+          </div>
+
+          {/* Hamburger — shown on mobile only */}
+          <button
+            className="hamburger show-mobile"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <IoMenu size={28} />
+          </button>
+        </div>
+
+        {/* Mobile dropdown menu */}
+        {menuOpen && (
+          <div className="mobile-menu">
+            <Link
+              to={!state?.user && "/auth"}
+              onClick={() => setMenuOpen(false)}
+            >
+              {state.user ? (
+                <span>
+                  {state.user.email.split("@")[0]}
+                  <br />
+                  Sign Out
+                </span>
+              ) : (
+                <span> Sign In</span>
+              )}
+            </Link>
+            <Link to="/orders" onClick={() => setMenuOpen(false)}>
+              Returns & Orders
+            </Link>
+            {subNavLinks.map(({ label, to }) => (
+              <Link key={label} to={to} onClick={() => setMenuOpen(false)}>
+                {label}
+              </Link>
+            ))}
+          </div>
+        )}
+      </header>
+
+      {/* Sub-header */}
+      <nav className="sub-header">
+        <ul className="menu-list d-flex">
+          <li className="hover-border">
+            <Link to="/" className="d-flex align-items-center gap-1">
+              <IoMenu className="menu-icon" />
+              <span className="hide-mobile">All</span>
+            </Link>
+          </li>
+          {subNavLinks.map(({ label, to }) => (
+            <li key={label} className="hover-border hide-mobile">
+              <Link to={to}>{label}</Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </>
+  );
+}
+
+export default Header;
+
+
+2. Header.css
+/* GLOBAL */
+:root {
+  --header-height: 70px;
+  --subheader-height: 40px;
+  --total-header: 110px; /* 70 + 40 */
+}
+
+.header {
+  height: var(--header-height);
+}
+
+.sub-header {
+  top: var(--header-height);
+  height: var(--subheader-height);
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+
+/* REUSABLE */
+.hover-border {
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.hover-border:hover {
+  border-color: white;
+}
+
+/* HEADER */
+.header {
+  padding: 10px 20px;
+  position: fixed;
+  padding: 10px 20px;
+  position: fixed; /* was: relative */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 11111;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+  flex-wrap: wrap;
+}
+
+/* LOGO */
+.logo img {
+  width: 100px;
+}
+
+/* LOCATION */
+.location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.location-icon {
+  font-size: 22px;
+}
+.location-text {
+  display: flex;
+  flex-direction: column;
+}
+.small-text {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* SEARCH */
+.search-wrapper {
+  flex: 1;
+  min-width: 200px;
+  height: 45px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 8px;
+  background: white;
+}
+.search-category {
+  width: 60px;
+  border: none;
+  background: #f3f3f3;
+  outline: none;
+  padding-left: 10px;
+}
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0 15px;
+  font-size: 16px;
+}
+.search-btn {
+  width: 55px;
+  border: none;
+  background: #f3a847;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.search-btn:hover {
+  background: #e6952f;
+}
+
+/* LANGUAGE */
+.language-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.language-wrapper img {
+  width: 28px;
+}
+
+/* ACCOUNT / ORDERS */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* CART */
+.cart-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cart-count {
+  position: absolute;
+  top: 3px;
+  left: 16px;
+  background: black;
+  color: gold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+.cart-icon {
+  font-size: 32px;
+}
+
+/* HAMBURGER */
+.hamburger {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* MOBILE DROPDOWN */
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  background: #131921;
+  padding: 10px 20px;
+  gap: 12px;
+  border-top: 1px solid #3a3a3a;
+}
+.mobile-menu a {
+  font-size: 15px;
+  padding: 6px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+/* SUB-HEADER */
+.sub-header {
+  background: #232f3e;
+  position: fixed; /* fix sub-header too */
+  top: 70px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.menu-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+  padding: 6px 10px;
+}
+.menu-icon {
+  font-size: 26px;
+  vertical-align: middle;
+}
+
+/* RESPONSIVE UTILITIES */
+.hide-mobile {
+  display: flex;
+}
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  .show-mobile {
+    display: flex !important;
+  }
+
+  .search-wrapper {
+    order: 10;
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .header-container {
+    gap: 8px;
+  }
+}
+
+
+3. Card.jsx
+import { Link } from "react-router-dom";
+function Card({ cate,  }) {
+  return (
+    <>
+      <div className="col-md card p-3 shadow" key={cate.key}>
+        <Link to={`category/${cate.title}`}>
+          <h1 className="text-dark">{cate.name}</h1>
+          <img src={cate.image} alt="" className="categoty-image mx-auto" />
+          <p className="text-dark pe-3 mx-auto">Shop Now</p>
+        </Link>
+      </div>
+    </>
+  );
+}
+
+export default Card;
+
+4. Category.jsx
+// import { data } from "./Data";
+import Card from "./Card";
+import "./Category.css";
+import productInfo from "./Data";
+function Category() {
+  return (
+    <>
+      <section className="category">
+        <div className="card-wraper  row gap-3 g-0 text-center  align-items-center justify-content-center ">
+          {productInfo?.map((item, index) => {
+            return <Card cate={item} key={index}
+             />;
+          })}
+        </div>
+      </section>
+    </>
+  );
+}
+
+export default Category;
+
+5.  Category.css
+.card {
+  max-width: 260px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  box-shadow: rgb(#255, 255, 1);
+}
+.categoty-image {
+  max-width: 80%;
+  height: 200px;
+  object-fit: cover;
+  padding: 0;
+}
+.card p {
+  max-width: 100px;
+}
+.card h1 {
+  font-size: 20px;
+  font-weight: bold;
+}
+.category {
+  position: relative;
+  margin-top: -250px;
+  z-index: 1111;
+}
+@media (max-width: 768px) {
+  .category {
+    margin-top: -50px;
+  }
+}
+
+6. Product.css
+.products {
+  max-width: 100% !important;
+  max-width: 260px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+.custom-card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+.flexed-products {
+  width: 100% !important;
+  height: 50vh;
+  gap: 20px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+.card-title {
+  min-height: 48px;
+  overflow: hidden;
+}
+a.products {
+  max-width: 300px;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+} /* IMAGE FIX */
+.custom-card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 10px;
+} /* TITLE FIX (important for alignment) */
+.card-title {
+  min-height: 48px;
+  overflow: hidden;
+} /* spacing consistency */
+.card-body p {
+  margin-bottom: 0.25rem;
+}
+.btn-cart {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+  border-radius: 40px;
+}
+.flexed-btn {
+  opacity: 1 !important;
+  width: 150px !important;
+}
+
+/* show button when hovering card */
+.products:hover .btn-cart {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+} /* optional hover effect for card */
+.products:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+.rating-star {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+.star-count {
+  font-size: 16px;
+  margin-top: 5px;
+}
+.desc {
+  width: 500px;
+}
+
+7. Product.jsx
+import { useState, useEffect } from "react";
+import axios from "axios";
+import ProductCard from "./ProductCard";
+import "./Product.css";
+
+function Product() {
+  const [products, setProduct] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("https://fakestoreapi.com/products");
+        setProduct(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  return (
+    <div className="mt-5">
+      <section className="row row-cols-2 row-cols-md-4 g-0 gap-2 justify-content-center">
+        {products?.map((p) => (
+          <ProductCard key={p?.id} product={p} addBtn={true} 
+          removeBtn={false}/>
+        ))}
+      </section>
+    </div>
+  );
+}
+
+export default Product;
+
+8. ProductCard.jsx
+import { Rating } from "@mui/material";
+import { Link } from "react-router-dom";
+import { useContext } from "react";
+
+import { type } from "../../Utility/action.type";
+import { DataProviderContext } from "../../DataProvider/DataProvider";
+
+function ProductCard({ product, flex, addBtn, removeBtn }) {
+  const { id, image, title, description, rating, price } = product;
+  const { state, dispatch } = useContext(DataProviderContext);
+
+  const addTocart = () => {
+    dispatch({ type: "ADD_TO_CART", item: product });
+  };
+  const removeFromCart = () => {
+    dispatch({ type: "REMOVE_FROM_CART", item: product });
+  };
+  function truncateText(text, limit = 150) {
+    if (!text) return "";
+    return text.length > limit ? text.slice(0, limit) + "..." : text;
+  }
+  const capitalizeFirst = (text) => {
+    if (!text) return "";
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
+  return (
+    <div
+      className={`products col text-dark shadow pt-3 mt-3 ${
+        flex
+          ? "flexed-products d-flex align-items-center shadow-none flex-wrap flex-md-nowrap"
+          : ""
+      }`}
+    >
+      <Link
+        to={`/products/${product?.id}`}
+        className={`d-flex justify-content-center text-decoration-none ${
+          flex ? "w-100 w-md-50" : "" // full width on mobile
+        }`}
+      >
+        <img
+          src={product?.image}
+          alt={product?.title}
+          className={`custom-card-img ${flex ? "detail-img" : ""}`}
+          // Remove the inline style entirely
+        />
+      </Link>
+
+      <div className={`p-3 ${flex ? "flex-grow-1" : ""}`}>
+        <div className="card-title">
+          <h5>{product?.title}</h5>
+          <p className="desc ">
+            <span className="fw-bold">Description </span>
+            {flex
+              ? capitalizeFirst(product?.description)
+              : capitalizeFirst(truncateText(product?.description, 130))}
+          </p>
+        </div>
+
+        <div className="rating-star">
+          <Rating value={product?.rating?.rate} precision={0.1} readOnly />
+          <p className="mb-1 star-count">{product?.rating?.count}</p>
+        </div>
+
+        <p className="mb-2">Price ${product?.price}</p>
+        {addBtn && (
+          <button
+            className={`btn-cart btn btn-warning w-100 rounded-5 ${flex ? "flexed-btn" : ""}`}
+            onClick={addTocart}
+          >
+            Add to Cart
+          </button>
+        )}
+
+        {removeBtn && (
+          <button
+            className={`btn-cart btn btn-warning w-100 rounded-5 ${flex ? "flexed-btn" : ""}`}
+            onClick={removeFromCart}
+          >
+            Remove
+          </button>
+        )}
+      </div>
+      {/* Add this — only show in cart (when removeBtn is true) */}
+      {removeBtn && (
+        <div className="d-flex align-items-center gap-2 mb-2">
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            onClick={() => dispatch({ type: type.REMOVE_ONE, item: product })}
+          >
+            -
+          </button>
+          <span>{product.quantity}</span>
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            onClick={() => dispatch({ type: type.ADD_TO_CART, item: product })}
+          >
+            +
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default ProductCard;
+
+9. Cart.css
+.cart-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* LEFT — takes most of the space */
+.cart-items-section {
+  flex: 1;
+}
+
+/* RIGHT — stays fixed while scrolling */
+.cart-summary {
+  width: 280px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 120px; /* below your fixed header */
+}
+
+@media (max-width: 768px) {
+  .cart-layout {
+    flex-direction: column;
+  }
+
+  .cart-summary {
+    width: 100%;
+    position: static; /* no sticky on mobile, shows at bottom */
+  }
+}
+
+10. Cart.jsx
+import Layout from "../Layoutes/Layout";
+import { useContext } from "react";
+import { DataProviderContext } from "../../DataProvider/DataProvider";
+import ProductCard from "../../Components/Product/ProductCard";
+import "./Cart.css";
+import { Link } from "react-router-dom";
+
+function Cart() {
+  const { state } = useContext(DataProviderContext);
+
+  const totalPrice = state.cart
+    .reduce((acc, item) => acc + item.price * item.quantity, 0)
+    .toFixed(2);
+
+  return (
+    <Layout>
+      <section className="cart-layout">
+        {/* LEFT — scrollable items */}
+        <div className="cart-items-section">
+          <h1>Cart</h1>
+          <hr />
+          {state.cart.length === 0 ? (
+            <p>Oops! No items in your basket.</p>
+          ) : (
+            <div className="d-flex flex-column gap-3">
+              {state.cart.map((item, index) => (
+                <ProductCard
+                  product={item}
+                  key={index}
+                  flex={true}
+                  addBtn={false}
+                  removeBtn={true}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* RIGHT — sticky summary */}
+        <div className="cart-summary">
+          <h5>Order Summary</h5>
+          <hr />
+          <p>
+            Total Items: <strong>{state.cart.length}</strong>
+          </p>
+          <p>
+            Total Quantity:{" "}
+            <strong>
+              {state.cart.reduce((acc, item) => acc + item.quantity, 0)}
+            </strong>
+          </p>
+          <p>
+            Total Price: <strong>${totalPrice}</strong>
+          </p>
+          <Link to={"/payments"}>
+            <button className="btn btn-warning w-100 rounded-5 mt-3">
+              Proceed to Checkout
+            </button>
+          </Link>
+        </div>
+      </section>
+    </Layout>
+  );
+}
+
+export default Cart;
+
+11. Payment.jsx
+import Layout from "../Layoutes/Layout";
+import "./Payment.css";
+import ProductCard from "../../Components/Product/ProductCard";
+import { useContext } from "react";
+import DataProvider, {
+  DataProviderContext,
+} from "../../DataProvider/DataProvider";
+function Payment() {
+  const { state } = useContext(DataProviderContext);
+  return (
+    <Layout>
+      <div className="chk-header p-3 text-center">
+        <h3>Checkout (5) Items</h3>
+      </div>
+
+      <div className="container">
+        <div className="detail row align-items-center py-3">
+          <h3 className="col-4">Delivery Address</h3>
+          <div className="col-4">
+            <p className="email ">email</p>
+            <p className="adres ">Addis Ababa</p>
+            <p className="adres ">Ethiopia</p>
+          </div>
+        </div>
+        <hr />
+        <div className="detail row align-items-center g-0 gap-5 my-5">
+          <h3 className="col-2">Riview Items and Delivery</h3>
+          <div className="col-6 product-card">
+            {state.cart.map((item, index) => {
+              return <ProductCard key={index} product={item} flex={true} />;
+            })}
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+}
+
+export default Payment;
+12. Payment.css
+
+.chk-header {
+  background: rgb(242, 247, 247);
+}
+.email,
+.adres {
+  line-height: 0;
+  font-size: 13px;
+}
+13. productDetail.jsx
+import { useParams } from "react-router-dom";
+import Layout from "../Layoutes/Layout";
+import axios from "axios";
+import API_Url from "../../API/EndPoints";
+import { useState, useEffect } from "react";
+import ProductCard from "../../Components/Product/ProductCard";
+import Loader from "../../Components/Loader/Loader";
+import "./ProductDeatail.css";
+function ProductDeatail() {
+  const { productId } = useParams();
+  const [product, setProduct] = useState();
+  const [IsLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setIsLoading(true);
+
+        const res = await axios.get(`${API_Url}/products/${productId}`);
+        setProduct(res.data);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+  if (IsLoading) {
+    return (
+      <Layout>
+        <Loader />
+      </Layout>
+    );
+  }
+
+  if (!product) {
+    return (
+      <Layout>
+        <h2>Product not found</h2>
+      </Layout>
+    );
+  }
+  return (
+    <Layout>
+      <section className=" p-3 detail-section container mx-auto shadow rounded-3 bg-light pb-5">
+        <ProductCard
+          product={product}
+          flex={true}
+          addBtn={true}
+          removeBtn={false}
+        />
+      </section>
+    </Layout>
+  );
+}
+
+export default ProductDeatail;
+14. Product.css
+/* Detail page image */
+.detail-img {
+  width: 100%;
+  max-width: 300px;
+  height: 250px;
+  object-fit: contain;
+}
+
+/* Make flexed card stack on mobile */
+@media (max-width: 768px) {
+  .flexed-products {
+    flex-direction: column !important;
+    height: auto !important;
+    align-items: center !important;
+  }
+
+  .flexed-products .w-100 {
+    width: 100% !important;
+  }
+
+  .detail-img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .desc {
+    width: 100% !important; /* This is the main culprit — 500px breaks on mobile */
+  }
+
+  .flexed-btn {
+    width: 100% !important;
+  }
+}
+15.Result.jsx
+import Layout from "../Layoutes/Layout";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import API_Url from "../../API/EndPoints";
+import "./Results.css";
+import { useEffect, useState } from "react";
+import ProductCard from "../../Components/Product/ProductCard";
+
+function Results() {
+  const [data, setData] = useState([]);
+  const { categoryName } = useParams();
+
+  useEffect(() => {
+    const fetchCategoryProducts = async () => {
+      try {
+        const { data } = await axios.get(
+          `${API_Url}/products/category/${categoryName}`,
+        );
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching category products:", error);
+      }
+    };
+
+    fetchCategoryProducts();
+  }, [categoryName]);
+
+  return (
+    <Layout>
+      <div>
+        <h1 className="text-center py-4">{categoryName.toUpperCase()}</h1>
+
+        <section className="row row-cols-1 row-cols-md-3 g-3 justify-content-center">
+          {data.map((category) => (
+            <ProductCard
+              key={category.id}
+              product={category}
+              addBtn={true}
+              removeBtn={false}
+            />
+          ))}
+        </section>
+      </div>
+    </Layout>
+  );
+}
+
+export default Results;
+16.Result.css
+section.row {
+  padding-bottom: 2rem;
+}

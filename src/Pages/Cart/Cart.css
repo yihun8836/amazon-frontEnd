@@ -1,0 +1,32 @@
+.cart-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cart-items-section {
+  flex: 1;
+}
+
+.cart-summary {
+  width: 280px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 120px;
+}
+
+@media (max-width: 768px) {
+  .cart-layout {
+    flex-direction: column;
+  }
+  .cart-summary {
+    width: 100%;
+    position: static;
+  }
+}

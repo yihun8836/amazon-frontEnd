@@ -1,0 +1,33 @@
+/* Detail page image */
+.detail-img {
+  width: 100%;
+  max-width: 300px;
+  height: 250px;
+  object-fit: contain;
+}
+
+/* Make flexed card stack on mobile */
+@media (max-width: 768px) {
+  .flexed-products {
+    flex-direction: column !important;
+    height: auto !important;
+    align-items: center !important;
+  }
+
+  .flexed-products .w-100 {
+    width: 100% !important;
+  }
+
+  .detail-img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .desc {
+    width: 100% !important; /* This is the main culprit — 500px breaks on mobile */
+  }
+
+  .flexed-btn {
+    width: 100% !important;
+  }
+}

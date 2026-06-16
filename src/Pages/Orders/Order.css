@@ -1,0 +1,44 @@
+.order-section {
+  min-height: 70vh;
+  background: #f3f3f3;
+}
+
+.order-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background: white;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.order-products {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .order-header {
+    flex-direction: column;
+  }
+
+  .order-card {
+    padding: 15px;
+  }
+}
+

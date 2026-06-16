@@ -1,0 +1,37 @@
+.card {
+  max-width: 260px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Fixed broken shadow definition */
+}
+
+.categoty-image {
+  max-width: 80%;
+  height: 200px;
+  object-fit: cover;
+  padding: 0;
+}
+
+.card p {
+  max-width: 100px;
+}
+
+.card h1 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.category {
+  position: relative;
+  margin-top: -250px;
+  z-index: 1111;
+}
+
+@media (max-width: 768px) {
+  .category {
+    margin-top: -50px;
+  }
+}
