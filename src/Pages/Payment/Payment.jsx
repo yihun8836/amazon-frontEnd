@@ -123,8 +123,6 @@ function Payment() {
 
           <div className="col-4">
             <p className="email">{state.user?.email}</p>
-            <p className="adres">123 React Lane</p>
-            <p className="adres">Chicago, IL</p>
           </div>
         </div>
 
