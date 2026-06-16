@@ -23,6 +23,12 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { state } = useContext(DataProviderContext);
 
+  // Helper handler to sign out and shut the mobile menu
+  const handleMobileSignOut = () => {
+    auth.signOut();
+    setMenuOpen(false);
+  };
+
   return (
     <>
       <header className="container-fluid header bg-black top-0 z-10000">
@@ -68,7 +74,7 @@ function Header() {
           {/* Account — hidden on mobile */}
           <Link
             className="nav-item hover-border hide-mobile p-0"
-            to={!state?.user && "/auth"}
+            to={!state?.user ? "/auth" : undefined}
           >
             <span className="small-text">
               {state.user ? (
@@ -97,7 +103,7 @@ function Header() {
           {/* Cart */}
           <div className="cart-wrapper hover-border">
             <Link to="/cart">
-              <span className="cart-count">{state.cart.length}</span>
+              <span className="cart-count">{state.cart?.length || 0}</span>
               <BiCart className="cart-icon" size={35} />
             </Link>
           </div>
@@ -114,20 +120,20 @@ function Header() {
         {/* Mobile dropdown menu */}
         {menuOpen && (
           <div className="mobile-menu">
-            <Link
-              to={!state?.user && "/auth"}
-              onClick={() => setMenuOpen(false)}
-            >
-              {state.user ? (
-                <span>
-                  {state.user.email.split("@")[0]}
-                  <br />
-                  Sign Out
-                </span>
-              ) : (
-                <span>Sign In</span>
-              )}
-            </Link>
+            {state.user ? (
+              // If logged in, render a clickable text that logs them out
+              <div className="mobile-logout-btn" onClick={handleMobileSignOut}>
+                Hello, {state.user.email.split("@")[0]}
+                <br />
+                <strong>Sign Out</strong>
+              </div>
+            ) : (
+              // If logged out, link them to the auth page
+              <Link to="/auth" onClick={() => setMenuOpen(false)}>
+                Sign In
+              </Link>
+            )}
+
             <Link to="/orders" onClick={() => setMenuOpen(false)}>
               Returns & Orders
             </Link>
