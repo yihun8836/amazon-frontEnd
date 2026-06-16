@@ -137,20 +137,30 @@ a.products {
   margin-bottom: 0.25rem;
 }
 
-/* HOVER STYLING MECHANICS: Only applied on standard non-flex grids */
-:not(.flexed-products) .btn-cart {
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-  transition: 0.2s ease-in-out;
-  border-radius: 40px;
-  font-size: 0.85rem;
+/* --- HOVER STYLING MECHANICS (FIXED FOR MOBILE) --- */
+/* This media query ensures hidden-until-hover only triggers on desktop devices with pointing mice */
+@media (hover: hover) {
+  :not(.flexed-products) .btn-cart {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: 0.2s ease-in-out;
+  }
+
+  :not(.flexed-products).products:hover .btn-cart {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
 }
 
-:not(.flexed-products).products:hover .btn-cart {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+/* Fallback for touchscreens (Mobile/Tablets) so buttons stay permanently visible */
+@media (hover: none) {
+  :not(.flexed-products) .btn-cart {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
 }
 
 .btn-cart {
@@ -239,5 +249,13 @@ a.products {
 
   .flexed-btn {
     width: 100% !important;
+  }
+}
+
+/* Prevents the card items from squishing on tiny/mobile screens now that buttons are always visible */
+@media (max-width: 576px) {
+  :not(.flexed-products).products {
+    height: auto !important;
+    min-height: 350px;
   }
 }
